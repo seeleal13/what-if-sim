@@ -18,7 +18,7 @@ This fun little web app lets you type in any “What if I…” scenario and get
 ---
 
 ## 🚀 Live Demo
-(If you deploy to GitHub Pages, Netlify, or Vercel, put the link here)
+
 
 ---
 
@@ -36,8 +36,9 @@ This fun little web app lets you type in any “What if I…” scenario and get
 ---
 
 ## 📸 Screenshots
+<img width="3780" height="1890" alt="Image" src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/07ff7bb8f795b5df368f4e3bfd2414b5af242422_screenshot_2025-09-13_125631.png" /> 
+<img width="3780" height="1890" alt="Image" src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/791b82bddf8ecbdece662cd28ad032c920ae4e48_screenshot_2025-09-13_074547.png" /> 
 
-(Add some screenshots or GIFs here once you have them)
 
 ---
 
