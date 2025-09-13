@@ -1,5 +1,5 @@
 # What If I... Simulator 🔮
-<img width="3780" height="1890" alt="Image" src="https://github.com/user-attachments/assets 9844b5dc-e349-4b73-9a83-0b4b2655988d" /> 
+<img width="3780" height="1890" alt="Image" src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/1ca84b40dc2824e6a76d7ab3691939929edfded5_white_minimalist_simple_coming_soon_banner.png" /> 
 
 Ever wondered what would happen if you quit your job and became a surfer? Or ate nothing but pizza for a year? 🍕  
 This fun little web app lets you type in any “What if I…” scenario and get back a **short, funny story** predicting your alternate reality.  
