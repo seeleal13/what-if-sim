@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What If I... Simulator 🔮</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        #whatIfInput {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            font-family: 'Comic Neue', cursive;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        #whatIfInput:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        #submitBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Comic Neue', cursive;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #submitBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        #submitBtn:active {
+            transform: translateY(0);
+        }
+        
+        #submitBtn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: none;
+            margin: 30px 0;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .result-section {
+            position: relative;
+            z-index: 1;
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .result-header {
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .story-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            text-align: left;
+        }
+        
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #2d3748;
+            white-space: pre-wrap;
+        }
+        
+        .try-again-btn {
+            margin-top: 20px;
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-family: 'Comic Neue', cursive;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .try-again-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .examples {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+        
+        .example-item {
+            margin: 5px 0;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .example-item:hover {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            #whatIfInput {
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+            
+            #submitBtn {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">What If I... 🔮</h1>
+            <p class="subtitle">Discover your hilarious alternate reality!</p>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-wrapper">
+                <textarea id="whatIfInput" placeholder="What if I quit my job and became a professional dog walker?" rows="3"></textarea>
+            </div>
+            <button id="submitBtn">✨ See My Future ✨</button>
+            
+            <div class="examples">
+                <p><strong>Try these examples:</strong></p>
+                <div class="example-item" onclick="fillExample('What if I quit my job and became an entrepreneur?')"> What if I quit my job and became an entrepreneur?</div>
+                <div class="example-item" onclick="fillExample('What if I only spoke binary for a year?')">💻 What if I only spoke binary for a year?</div>
+                <div class="example-item" onclick="fillExample('What if I bought 100 houseplants?')">🌱 What if I bought 100 houseplants?</div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Consulting your odds... 🔮</div>
+        </div>
+        
+        <div class="result-section" id="resultSection">
+            <div class="result-header">
+                <span>📖</span>
+                <span>Your AI-Generated Future</span>
+                <span>📖</span>
+            </div>
+            <div class="story-container">
+                <div class="story-text" id="storyText"></div>
+            </div>
+            <button class="try-again-btn" onclick="tryAgain()">Try Another Scenario</button>
+        </div>
+    </div>
+
+    <script>
+        const whatIfInput = document.getElementById('whatIfInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const resultSection = document.getElementById('resultSection');
+        const storyText = document.getElementById('storyText');
+
+        const loadingMessages = [
+            "Calculating chaos probability... 🎲",
+            "Interviewing your future self... 👤",
+            "Checking alternate timelines... ⏰",
+            "Gathering cosmic insights... ✨"
+        ];
+
+        submitBtn.addEventListener('click', handleSubmit);
+        whatIfInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit();
+            }
+        });
+
+        async function handleSubmit() {
+            const scenario = whatIfInput.value.trim();
+            
+            console.log('📝 Starting with scenario:', scenario);
+            
+            if (!scenario) {
+                whatIfInput.focus();
+                whatIfInput.style.borderColor = '#f56565';
+                setTimeout(() => {
+                    whatIfInput.style.borderColor = '#e2e8f0';
+                }, 2000);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            resultSection.style.display = 'none';
+            
+            let messageIndex = 0;
+            const loadingTextElement = document.querySelector('.loading-text');
+            const messageInterval = setInterval(() => {
+                loadingTextElement.textContent = loadingMessages[messageIndex];
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+            }, 1500);
+
+            try {
+                console.log('🎯 Calling generateStory...');
+                const story = await generateStory(scenario);
+                console.log('📖 Received story:', story ? 'Success' : 'Failed');
+                
+                clearInterval(messageInterval);
+                loading.style.display = 'none';
+                
+                if (story) {
+                    resultSection.style.display = 'block';
+                    storyText.textContent = '';
+                    typeWriter(story, storyText, 30);
+                } else {
+                    throw new Error('No story received');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                clearInterval(messageInterval);
+                loading.style.display = 'none';
+                
+                resultSection.style.display = 'block';
+                storyText.textContent = 'Sorry, the AI fortune teller is currently unavailable. Please try again later!';
+            }
+            
+            submitBtn.disabled = false;
+        }
+
+        async function generateStory(scenario) {
+            console.log('🚀 generateStory called with:', scenario);
+            
+            try {
+                console.log('📡 Making API request to Hack Club AI...');
+                
+                const response = await fetch('https://ai.hackclub.com/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        messages: [{
+                            role: "system",
+                            content: "You are a humorous Prognosticator who creates funny and entertaining short stories about hypothetical life scenarios. Your stories should be lighthearted, creative, and amusing but never mean-spirited or offensive. Keep responses between 150-250 words. Include unexpected plot twists if possible, funny consequences, and relatable humor. Make the stories feel personal and engaging, as if you're speaking directly to the person. use of emojies is okay but make it rare."
+                        }, {
+                            role: "user",
+                            content: `Create a funny story about this scenario: ${scenario}`
+                        }]
+                    })
+                });
+
+                console.log('📥 Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error:', response.status, errorText);
+                    return null;
+                }
+
+                const data = await response.json();
+                console.log('📋 API Response:', data);
+                
+                let story = null;
+                
+                if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+                    console.log('Found story in choices[0].message.content');
+                    story = data.choices[0].message.content;
+                } else if (data.content) {
+                    console.log('Found story in content');
+                    story = data.content;
+                } else if (data.message) {
+                    console.log('Found story in message');
+                    story = data.message;
+                } else {
+                    console.error('Unknown response format:', Object.keys(data));
+                    return null;
+                }
+                
+                if (story) {
+                    console.log('Cleaning story...');
+                    story = story.replace(/<think>[\s\S]*?<\/think>/gi, '');
+                    story = story.replace(/<\/?think>/gi, '');
+                    story = story.trim().replace(/\n\s*\n/g, '\n\n');
+                    console.log('Cleaned story ready!');
+                }
+                
+                return story;
+                
+            } catch (error) {
+                console.error('Network error:', error);
+                return null;
+            }
+        }
+
+        function typeWriter(text, element, speed = 50) {
+            element.textContent = '';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        function fillExample(example) {
+            whatIfInput.value = example;
+            whatIfInput.focus();
+        }
+
+        function tryAgain() {
+            resultSection.style.display = 'none';
+            whatIfInput.value = '';
+            whatIfInput.focus();
+        }
+    </script>
+</body>
+</html>
