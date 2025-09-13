@@ -18,7 +18,7 @@ This fun little web app lets you type in any “What if I…” scenario and get
 ---
 
 ## 🚀 Live Demo
-
+[GitHub Page](https://seeleal13.github.io/what-if-sim/)
 
 ---
 
